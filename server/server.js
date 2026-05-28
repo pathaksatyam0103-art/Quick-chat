@@ -6,29 +6,27 @@ import { connectDB } from "./lib/db.js";
 import userRouter from "./routes/userRoutes.js";
 import messageRouter from "./routes/messageRoutes.js";
 import { Server } from "socket.io";
-// import { Socket } from "dgram";
-//Create Express app and HTTP server
+
+// Create Express app and HTTP server
 const app = express();
 const server = http.createServer(app);
 
-//Initialize socket.io server
+// Initialize socket.io server
 export const io = new Server(server, {
     cors: { origin: "*" }
 })
 
-//Store online users
-export const userSocketMap = {};//{userId: socketId}
+// Store online users
+export const userSocketMap = {}; // {userId: socketId}
 
-
-//Socket.io connection handler
+// Socket.io connection handler
 io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;
     console.log("User Connected", userId);
 
     if (userId) userSocketMap[userId] = socket.id;
 
-    //Emit online users to all the connected clients
-
+    // Emit online users to all the connected clients
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
     socket.on("disconnect", () => {
@@ -36,23 +34,43 @@ io.on("connection", (socket) => {
         delete userSocketMap[userId];
         io.emit("getOnlineUsers", Object.keys(userSocketMap))
     })
-
 })
 
-//Middleware setup
+// Middleware setup
 app.use(express.json({ limit: "4mb" }));
 app.use(cors());
 
-app.use("/api/status", (req, res) => res.send("Server is live "));
+// Health check endpoint
+app.get("/api/status", (req, res) => {
+    res.json({ status: "Server is live", mongodb: process.env.MONGODB_URI ? "configured" : "missing" });
+});
+
 app.use("/api/auth", userRouter);
-app.use("/api/messages", messageRouter)
-//Connect to MongDB
+app.use("/api/messages", messageRouter);
 
-await connectDB();
+// Root endpoint
+app.get("/", (req, res) => {
+    res.json({ message: "Quick Chat Server Running" });
+});
 
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({ error: "Route not found" });
+});
+
+// Connect to MongoDB
+try {
+    await connectDB();
+    console.log("MongoDB connected successfully");
+} catch (error) {
+    console.error("MongoDB connection failed:", error.message);
+}
+
+// Export for Vercel serverless
+export default server;
+
+// For local development
 if (process.env.NODE_ENV !== 'production') {
     const PORT = process.env.PORT || 5000;
     server.listen(PORT, () => console.log("Server is running on PORT: " + PORT));
 }
-
-export default server;
