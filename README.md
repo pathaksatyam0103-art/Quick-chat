@@ -1,6 +1,14 @@
-# Quick Chat - Full Stack Chat Application
+# Quick-Chat - Full Stack Chat Application
 
 A real-time chat application built with React, Node.js, Express, Socket.io, and MongoDB.
+
+## 🚀 Quick Deploy
+
+### Deploy to Vercel (Recommended)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/pathaksatyam0103-art/Quick-chat)
+
+Or follow the [Deployment Guide](./DEPLOYMENT_GUIDE.md) for step-by-step instructions.
 
 ## Features
 
@@ -9,6 +17,7 @@ A real-time chat application built with React, Node.js, Express, Socket.io, and 
 - 👥 User profiles and avatars
 - 📱 Responsive design with Tailwind CSS
 - 🚀 Fast development with Vite
+- ☁️ Cloud image uploads with Cloudinary
 
 ## Tech Stack
 
@@ -53,7 +62,7 @@ npm install
 ```
 
 3. Set up environment variables
-Create a `.env` file in the server directory:
+Create a `.env` file in the server directory (use `.env.example` as reference):
 ```env
 MONGODB_URI=mongodb://localhost:27017/chat-app
 PORT=5000
@@ -68,7 +77,7 @@ CLOUDINARY_API_SECRET=your_cloudinary_secret
 # Start the server (from server directory)
 npm run server
 
-# Start the client (from client directory)
+# Start the client (from client directory in a new terminal)
 npm run dev
 ```
 
@@ -76,31 +85,15 @@ The application will be available at:
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:5000
 
-## Deployment on Vercel
+## Deployment
 
-### Prerequisites
-- Vercel account
-- MongoDB Atlas account (for cloud database)
+### Vercel Deployment
+See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for detailed instructions.
 
-### Steps
-
-1. **Set up MongoDB Atlas**
-   - Create a free MongoDB Atlas account
-   - Create a new cluster
-   - Get your connection string
-
-2. **Deploy to Vercel**
-   - Connect your GitHub repository to Vercel
-   - Add environment variables in Vercel dashboard:
-     - `MONGODB_URI`: Your MongoDB Atlas connection string
-     - `JWT_SECRET`: A random secret string
-     - `CLOUDINARY_CLOUD_NAME`: Your Cloudinary cloud name
-     - `CLOUDINARY_API_KEY`: Your Cloudinary API key
-     - `CLOUDINARY_API_SECRET`: Your Cloudinary API secret
-
-3. **Deploy**
-   - Vercel will automatically build and deploy your application
-   - Your app will be available at `https://your-app-name.vercel.app`
+### What You'll Need
+1. **MongoDB URI** - Get from MongoDB Atlas (free)
+2. **JWT Secret** - Any random 32+ character string
+3. **Cloudinary Credentials** - Get from Cloudinary (free)
 
 ## Project Structure
 
@@ -119,7 +112,8 @@ Quick-chat/
 │   ├── routes/           # API routes
 │   ├── middleware/       # Custom middleware
 │   └── lib/              # Utility functions
-└── vercel.json           # Vercel configuration
+├── vercel.json           # Vercel configuration
+└── DEPLOYMENT_GUIDE.md   # Deployment instructions
 ```
 
 ## API Endpoints
@@ -139,3 +133,7 @@ Quick-chat/
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
+
+## Support
+
+For deployment issues, check the [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) troubleshooting section.
